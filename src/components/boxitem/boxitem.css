@@ -1,0 +1,51 @@
+  
+  
+.wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 1000px;
+    height: 1000px;
+    background-color: #0f0;
+}
+.area {
+    top: 50px;
+    left:50px;
+    background-color: dodgerblue;
+    width: 200px;
+    height: 100px;
+    position: relative;
+    cursor:move;
+}
+
+.corner {
+    background-color: white;
+    width: 10px;
+    height: 10px;
+    border:1px solid dodgerblue;
+    position: absolute;
+}
+
+.right-top {
+    right: -5px;
+    top: -5px;
+    cursor: nesw-resize	;
+}
+
+.left-top {
+    left:-5px;
+    top:-5px;
+    cursor: nwse-resize;    
+}
+
+.left-bottom {
+    bottom:-5px;
+    left: -5px;
+    cursor: nesw-resize	;    
+}
+
+.right-bottom {
+    bottom:-5px;
+    right: -5px;
+    cursor: nwse-resize;
+}
