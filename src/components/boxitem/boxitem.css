@@ -1,19 +1,19 @@
-  
-  
 .wrapper {
     position: fixed;
     left: 0;
     top: 0;
     width: 1000px;
     height: 1000px;
-    background-color: #0f0;
+    background-color: #fff;
 }
+
 .area {
+    padding-left:20px;
+    padding-top:10px;
+    color: #fff;
     top: 50px;
     left:50px;
     background-color: dodgerblue;
-    width: 200px;
-    height: 100px;
     position: relative;
     cursor:move;
 }
