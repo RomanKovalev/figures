@@ -1,48 +1,40 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import './boxitem.css'
 
-export default class Boxitem extends Component {
-    constructor(props) {
-        super(props);
-        console.log(props.state)
-        this.state = this.props.state
-    }
-
-
-
-    render() {
+const Boxitem = ({state, onMouseDown, onDragStart }) => {
         return (
             <div
                 className="area"
-                draggable={this.props.state.draggable}
-                onDragStart={(e) => this.props.onDragStart(e)}
+                draggable={state.draggable}
+                onDragStart={(e) => onDragStart(e)}
                 style={
                     {
-                        top: this.props.state.top + 'px',
-                        left: this.props.state.left + 'px',
-                        width: this.props.state.width + 'px',
-                        height: this.props.state.height + 'px',
+                        top: state.top + 'px',
+                        left: state.left + 'px',
+                        width: state.width + 'px',
+                        height: state.height + 'px',
                     }
                 }
-            >
+            > { state.top}, { state.left}, { state.width}, { state.height}, {state.resizer}
                 <div
                     className="corner left-top"
-                    onMouseDown={(e) => this.props.onMouseDown(e)}
+                    onMouseDown={(e) => onMouseDown(e)}
                 ></div>
                 <div
                     className="corner right-top"
-                    onMouseDown={(e) => this.props.onMouseDown(e)}
+                    onMouseDown={(e) => onMouseDown(e)}
                 ></div>
                 <div
                     className="corner left-bottom"
-                    onMouseDown={(e) => this.props.onMouseDown(e)}
+                    onMouseDown={(e) => onMouseDown(e)}
                 ></div>
                 <div
                     className="corner right-bottom"
-                    onMouseDown={(e) => this.props.onMouseDown(e)}
+                    onMouseDown={(e) => onMouseDown(e)}
                 ></div>
             </div>
         );
     }
-};
+
+    export default Boxitem;

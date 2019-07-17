@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Boxitem from "../boxitem";
 
+import './app.css'
+
 
 export default class App extends Component {
 
@@ -94,7 +96,7 @@ export default class App extends Component {
         <div className="container-drag">
           <div className="wrapper"
             onDragOver={(e) => this.onDragOver(e)}
-            onDrop={(e) => { this.onDrop(e) }}
+            onDrop={(e) => this.onDrop(e) }
             onMouseUp={(e) => this.onMouseUp(e)}
           >
             <Boxitem
