@@ -15,22 +15,14 @@ export default class Boxitem extends Component {
     }
 
     onDragStart = (ev) => {
-        console.log('onDragStart')
         let style = window.getComputedStyle(ev.target, null);
         ev.dataTransfer.setData("text/plain",
             (parseInt(style.getPropertyValue("left"), 10) - ev.clientX) + ',' + (parseInt(style.getPropertyValue("top"), 10) - ev.clientY));
-            ev.dataTransfer.setData("effectAllowed", 'copy')
             ev.dataTransfer.setDragImage(ev.target, window.outerWidth, window.outerHeight)
-    }
-
-    onDrag = (ev) => {
-        console.log('DRAGDRADRAG')
-        return false;
     }
 
     onDrop = (ev) => {
         ev.preventDefault();
-        console.log('onDrop')
         if (this.state.resizer === 'corner left-top') {
             this.setState({
                 width: this.state.width - (ev.clientX - this.state.offsetx),
@@ -38,9 +30,7 @@ export default class Boxitem extends Component {
                 left: ev.clientX,
                 top: ev.clientY,
             })
-            console.log()
         } else if (this.state.resizer === 'corner right-top') {
-            console.log('corner right-top', ev.clientY, this.state.offsety, this.state.left)
             this.setState({
                 width: this.state.width - (this.state.offsetx - ev.clientX),
                 top: ev.clientY,
@@ -67,22 +57,14 @@ export default class Boxitem extends Component {
             this.setState({ top: ev.clientY + parseInt(offset[1], 10) })
         }
         this.setState({ 'resizer': null })
-
         return false;
     }
 
     onDragOver = (ev) => {
-        console.log('DragOver')
-        ev.preventDefault();
-    }
-
-    onDragEnd = (ev) => {
-        console.log('onDragEnd')
         ev.preventDefault();
     }
 
     onMouseDown = (ev) => {
-        console.log('onMouseDown')
         this.setState({
             offsetx: ev.clientX,
             offsety: ev.clientY,
@@ -94,11 +76,7 @@ export default class Boxitem extends Component {
 
     onMouseUp = (ev) => {
         ev.preventDefault()
-        console.log('onMouseUp')
-
-
     }
-
 
     render() {
         return (
@@ -121,12 +99,6 @@ export default class Boxitem extends Component {
                             }
                         }
                     >
-                        TOP: {this.state.top}<br />
-                        LEFT: {this.state.left}<br />
-                        WIDTH: {this.state.width}<br />
-                        HEIGHT: {this.state.height}<br />
-                        Draggable: {this.state.draggable}<br />
-                        Resizer: {this.state.resizer}<br />
                         <div
                             className="corner left-top"
                             onMouseDown={(e) => this.onMouseDown(e)}
