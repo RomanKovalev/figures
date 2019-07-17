@@ -6,6 +6,8 @@ import './app.css'
 
 export default class App extends Component {
 
+  maxId = 100
+
   state = {
     items: [
       {
@@ -37,7 +39,7 @@ export default class App extends Component {
         draggable: true,
         offsetx: 0,
         offsety: 0,
-      },            
+      },
       {
         id: 4,
         left: 190,
@@ -55,32 +57,33 @@ export default class App extends Component {
   onDrop = (ev) => {
     console.log('onDrop')
     ev.preventDefault();
-    const id = ev.dataTransfer.getData("id") - 1
-    console.log(this.state.items[id])
-
+    const id = ev.dataTransfer.getData("id")
+    const figure = this.state.items.filter(obj => {
+      return obj.id == id
+    })
     let width, height, top, left
-    width = this.state.items[id].width
-    height = this.state.items[id].height
+    width = figure[0].width
+    height = figure[0].height
     if (this.state.resizer === 'corner left-top') {
-      width = this.state.items[id].width - (ev.clientX - this.state.items[id].offsetx)
-      height = this.state.items[id].height - (ev.clientY - this.state.items[id].offsety)
+      width = figure[0].width - (ev.clientX - figure[0].offsetx)
+      height = figure[0].height - (ev.clientY - figure[0].offsety)
       left = ev.clientX
       top = ev.clientY
     } else if (this.state.resizer === 'corner right-top') {
-      width = this.state.items[id].width - (this.state.items[id].offsetx - ev.clientX)
+      width = figure[0].width - (figure[0].offsetx - ev.clientX)
       top = ev.clientY
-      height = this.state.items[id].height - (ev.clientY - this.state.items[id].offsety)
-      left = this.state.items[id].left
+      height = figure[0].height - (ev.clientY - figure[0].offsety)
+      left = figure[0].left
     } else if (this.state.resizer === 'corner left-bottom') {
-      width = this.state.items[id].width - (ev.clientX - this.state.items[id].offsetx)
+      width = figure[0].width - (ev.clientX - figure[0].offsetx)
       left = ev.clientX
-      height = this.state.items[id].height - (this.state.items[id].offsety - ev.clientY)
-      top = this.state.items[id].top
+      height = figure[0].height - (figure[0].offsety - ev.clientY)
+      top = figure[0].top
     } else if (this.state.resizer === 'corner right-bottom') {
-      width = this.state.items[id].width - (this.state.items[id].offsetx - ev.clientX)
-      height = this.state.items[id].height - (this.state.items[id].offsety - ev.clientY)
-      top = this.state.items[id].top
-      left = this.state.items[id].left
+      width = figure[0].width - (figure[0].offsetx - ev.clientX)
+      height = figure[0].height - (figure[0].offsety - ev.clientY)
+      top = figure[0].top
+      left = figure[0].left
     } else {
       const offset = ev.dataTransfer.getData("text/plain").split(',')
       /** todo make pretty **/
@@ -90,7 +93,7 @@ export default class App extends Component {
 
     this.setState(state => {
       state.items.map((item, j) => {
-        if (j === id) {
+        if (item.id == id) {
           item.left = left
           item.top = top
           item.width = width
@@ -101,7 +104,7 @@ export default class App extends Component {
         }
       });
     });
-    this.setState({ 'resizer': null }) 
+    this.setState({ 'resizer': null })
     return false;
   }
 
@@ -113,7 +116,6 @@ export default class App extends Component {
 
   onMouseUp = (ev) => {
     console.log('onMouseUp')
-
     ev.preventDefault()
   }
 
@@ -131,11 +133,10 @@ export default class App extends Component {
     console.log('onMouseDown')
     const offsetx = ev.clientX
     const offsety = ev.clientY
-    this.setState({'resizer': ev.target.className})
-    id--
+    this.setState({ 'resizer': ev.target.className })
     this.setState(state => {
       state.items.map((item, j) => {
-        if (j === id) {
+        if (item.id == id) {
           item.offsetx = offsetx
           item.offsety = offsety
           item.draggable = true
@@ -147,6 +148,42 @@ export default class App extends Component {
     });
     return false;
   }
+
+  delAll = () => {
+    this.setState({ items: [] })
+  };
+
+  getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+
+  addFigure = () => {
+
+    const newFigure = {
+      id: this.maxId++,
+      left: this.getRandomInt(10, 900),
+      top: this.getRandomInt(10, 900),
+      width: this.getRandomInt(30, 300),
+      height: this.getRandomInt(30, 300),
+      draggable: true,
+      offsetx: 0,
+      offsety: 0,
+    }
+
+    this.setState( ({items}) => {
+      console.log(items)
+      const newArr = [
+        ...items,
+        newFigure
+      ];
+    console.log(this.state.items)
+
+      return {
+        items: newArr
+      }
+    })
+  };
+
 
   render() {
     const listItems = this.state.items.map((p) =>
@@ -160,14 +197,25 @@ export default class App extends Component {
     );
     return (
       <div>
-        <button>Add +</button>
-        <button>Clear all</button>
         <div className="container-drag">
+
           <div className="wrapper"
             onDragOver={(e) => this.onDragOver(e)}
             onDrop={(e) => this.onDrop(e)}
             onMouseUp={(e) => this.onMouseUp(e)}
           >
+            <div className="bnt-wrapper">
+              <button
+                onClick={this.addFigure}
+              >
+                Add +
+              </button><br />
+              <button
+                onClick={this.delAll}
+              >
+                Clear all
+              </button>
+            </div>
             {listItems}
           </div>
         </div>
