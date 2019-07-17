@@ -1,58 +1,84 @@
 import React, { Component } from 'react';
 import Boxitem from "../boxitem";
 
+import FetchService from "../../services/fetch-service";
 import './app.css'
 
 
 export default class App extends Component {
 
+  constructor() {
+    super();
+    this.updateFigures();
+  }
+
+  fetchService = new FetchService();
+
+  updateFigures() {
+    this.fetchService
+      .getFigures()
+      .then((figures) => {
+        // console.log(figures)
+        // console.log(this.state.items)
+        this.setState({ 'items': figures })
+      })
+  };
+
   maxId = 100
 
   state = {
-    items: [
-      {
-        id: 1,
-        left: 40,
-        top: 20,
-        width: 100,
-        height: 200,
-        draggable: true,
-        offsetx: 0,
-        offsety: 0,
-      },
-      {
-        id: 2,
-        left: 140,
-        top: 120,
-        width: 200,
-        height: 50,
-        draggable: true,
-        offsetx: 0,
-        offsety: 0,
-      },
-      {
-        id: 3,
-        left: 400,
-        top: 20,
-        width: 100,
-        height: 200,
-        draggable: true,
-        offsetx: 0,
-        offsety: 0,
-      },
-      {
-        id: 4,
-        left: 190,
-        top: 180,
-        width: 90,
-        height: 100,
-        draggable: true,
-        offsetx: 0,
-        offsety: 0,
-      },
-    ],
+    items: [],
     resizer: null
+
   }
+
+  // state = {
+  //   items: [
+  //     {
+  //       id: 1,
+  //       left: 40,
+  //       top: 20,
+  //       width: 100,
+  //       height: 200,
+  //       draggable: true,
+  //       offsetx: 0,
+  //       offsety: 0,
+  //     },
+  //     {
+  //       id: 2,
+  //       left: 140,
+  //       top: 120,
+  //       width: 200,
+  //       height: 50,
+  //       draggable: true,
+  //       offsetx: 0,
+  //       offsety: 0,
+  //     },
+  //     {
+  //       id: 3,
+  //       left: 400,
+  //       top: 20,
+  //       width: 100,
+  //       height: 200,
+  //       draggable: true,
+  //       offsetx: 0,
+  //       offsety: 0,
+  //     },
+  //     {
+  //       id: 4,
+  //       left: 190,
+  //       top: 180,
+  //       width: 90,
+  //       height: 100,
+  //       draggable: true,
+  //       offsetx: 0,
+  //       offsety: 0,
+  //     },
+  //   ],
+  //   resizer: null
+  // }
+
+
 
   onDrop = (ev) => {
     console.log('onDrop')
@@ -110,7 +136,6 @@ export default class App extends Component {
 
   onDragOver = (ev) => {
     console.log('onDragOver')
-
     ev.preventDefault();
   }
 
@@ -170,13 +195,13 @@ export default class App extends Component {
       offsety: 0,
     }
 
-    this.setState( ({items}) => {
+    this.setState(({ items }) => {
       console.log(items)
       const newArr = [
         ...items,
         newFigure
       ];
-    console.log(this.state.items)
+      console.log(this.state.items)
 
       return {
         items: newArr
