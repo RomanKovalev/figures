@@ -5,8 +5,9 @@
     top: 50px;
     left:50px;
     background-color: dodgerblue;
-    position: relative;
+    position: absolute;
     cursor:move;
+    
 }
 
 .corner {
