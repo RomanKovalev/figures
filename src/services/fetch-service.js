@@ -15,7 +15,6 @@ export default class FetchService {
     return res
   }
 
-
   async accessResource(body, url, method) {
     const res = await fetch(url, {
       method: method,

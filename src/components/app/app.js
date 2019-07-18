@@ -14,8 +14,6 @@ export default class App extends Component {
 
   fetchService = new FetchService();
 
-  maxId = 100
-
   state = {
     items: [],
     resizer: null

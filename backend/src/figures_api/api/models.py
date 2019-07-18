@@ -5,6 +5,7 @@ class Figure(models.Model):
     left = models.IntegerField()
     width = models.IntegerField()
     height = models.IntegerField()
+    draggable = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id)
