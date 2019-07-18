@@ -61,18 +61,19 @@ export default class App extends Component {
       let width, height, top, left
       width = figure[0].width
       height = figure[0].height
+      console.log(figure[0].offsetx)
       if (this.state.resizer === 'corner left-top') {
-        width = figure[0].width - (ev.clientX - figure[0].offsetx)
-        height = figure[0].height - (ev.clientY - figure[0].offsety)
+        width = figure[0].width - (ev.clientX - figure[0].left)
+        height = figure[0].height - (ev.clientY - figure[0].top)
         left = ev.clientX
         top = ev.clientY
       } else if (this.state.resizer === 'corner right-top') {
         width = figure[0].width - (figure[0].offsetx - ev.clientX)
         top = ev.clientY
-        height = figure[0].height - (ev.clientY - figure[0].offsety)
+        height = figure[0].height - (ev.clientY - figure[0].top)
         left = figure[0].left
       } else if (this.state.resizer === 'corner left-bottom') {
-        width = figure[0].width - (ev.clientX - figure[0].offsetx)
+        width = figure[0].width - (ev.clientX - figure[0].left)
         left = ev.clientX
         height = figure[0].height - (figure[0].offsety - ev.clientY)
         top = figure[0].top
@@ -119,18 +120,11 @@ export default class App extends Component {
     const offsetx = ev.clientX
     const offsety = ev.clientY
     this.setState({ 'resizer': ev.target.className })
-    this.setState(state => {
-      state.items.map((item, j) => {
-        if (item.id == id) {
-          item.offsetx = offsetx
-          item.offsety = offsety
-          item.draggable = true
-          return item
-        } else {
-          return item;
-        }
-      });
-    });
+    const body = {
+      "offsetx": offsetx,
+      "offsety": offsety,
+    }
+    this.updateFigure(body, id)
     return false;
   }
 
