@@ -18,7 +18,6 @@ const Boxitem = ({ state, onMouseDown, onDragStart }) => {
             }
         >
             {/* {state.top}, {state.left}, {state.width}, {state.height}, */}
-            <h1>{state.id}</h1>
             <div
                 className="corner left-top"
                 onMouseDown={(e) => onMouseDown(e, state.id)}
