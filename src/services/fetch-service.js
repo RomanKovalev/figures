@@ -40,12 +40,9 @@ export default class FetchService {
     return res
   }
 
-
   async updateFigure(body, id) {
     const url = this._apiBase + 'update/' + id + '/'
-    console.log(url)
     const res = await this.accessResource(body, url, 'PATCH')
     return res
   }
-
 }

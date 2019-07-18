@@ -4,7 +4,6 @@ import Boxitem from "../boxitem";
 import FetchService from "../../services/fetch-service";
 import './app.css'
 
-
 export default class App extends Component {
 
   constructor() {
@@ -32,7 +31,6 @@ export default class App extends Component {
     this.fetchService
       .postFigure(body)
       .then((answer) => {
-        console.log(answer)
         this.getFigures()
       })
   }
@@ -41,7 +39,6 @@ export default class App extends Component {
     this.fetchService
     .delFigures()
     .then((answer) => {
-      console.log(answer)
       this.getFigures()
     })
   }
@@ -50,19 +47,16 @@ export default class App extends Component {
     this.fetchService
     .updateFigure(body, id)
     .then((answer) => {
-      console.log(answer)
       this.getFigures()
     })
   }  
   
   onDrop = (ev) => {
-    console.log('onDrop')
     ev.preventDefault();
     const id = ev.dataTransfer.getData("id")
     const figure = this.state.items.filter(obj => {
       return obj.id == id
     })
-    console.log(!!figure[0])
     if (!!figure[0]) {
       let width, height, top, left
       width = figure[0].width
@@ -100,38 +94,21 @@ export default class App extends Component {
       }
       this.updateFigure(body, id)
       this.getFigures()
-      // this.setState(state => {
-      //   state.items.map((item, j) => {
-      //     if (item.id == id) {
-      //       item.left = left
-      //       item.top = top
-      //       item.width = width
-      //       item.height = height
-      //       return item
-      //     } else {
-      //       return item;
-      //     }
-      //   });
-      // });
       this.setState({ 'resizer': null })
       return false;
     }
   }
 
   onDragOver = (ev) => {
-    console.log('onDragOver')
     ev.preventDefault();
   }
 
   onMouseUp = (ev) => {
-    console.log('onMouseUp')
     ev.preventDefault()
   }
 
   onDragStart = (ev, id) => {
-    console.log('onDragStart')
     let style = window.getComputedStyle(ev.target, null);
-    console.log((parseInt(style.getPropertyValue("left"), 10) - ev.clientX) + ',' + (parseInt(style.getPropertyValue("top"), 10) - ev.clientY))
     ev.dataTransfer.setData("text/plain",
       (parseInt(style.getPropertyValue("left"), 10) - ev.clientX) + ',' + (parseInt(style.getPropertyValue("top"), 10) - ev.clientY));
     ev.dataTransfer.setDragImage(ev.target, window.outerWidth, window.outerHeight)
@@ -139,7 +116,6 @@ export default class App extends Component {
   }
 
   onMouseDown = (ev, id) => {
-    console.log('onMouseDown')
     const offsetx = ev.clientX
     const offsety = ev.clientY
     this.setState({ 'resizer': ev.target.className })
@@ -160,8 +136,6 @@ export default class App extends Component {
 
   delAll = () => {
     this.delFigures()
-    
-    // this.setState({ items: [] })
   };
 
   getRandomInt = (min, max) => {
@@ -170,31 +144,17 @@ export default class App extends Component {
 
   addFigure = () => {
     const newFigure = {
-      left: this.getRandomInt(10, 200),
-      top: this.getRandomInt(10, 200),
-      width: this.getRandomInt(30, 30),
-      height: this.getRandomInt(30, 30),
+      left: this.getRandomInt(10, 900),
+      top: this.getRandomInt(10, 900),
+      width: this.getRandomInt(40, 300),
+      height: this.getRandomInt(40, 300),
       draggable: true,
       offsetx: 0,
       offsety: 0,
     }
-
     this.postFigure(newFigure);
     this.getFigures();
-
-    // this.setState(({ items }) => {
-    //   console.log(items)
-    //   const newArr = [
-    //     ...items,
-    //     newFigure
-    //   ];
-    //   console.log(this.state.items)
-    // return {
-    //   items: newArr
-    // }
-    // })
   };
-
 
   render() {
     const listItems = this.state.items.map((p) =>
