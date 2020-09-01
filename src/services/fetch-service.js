@@ -1,6 +1,6 @@
 export default class FetchService {
 
-  _apiBase = 'http://127.0.0.1:8000/api/'
+  _apiBase = 'https://figures-rvk.herokuapp.com/api/'
 
   async getResource(url) {
     const res = await fetch(url)
