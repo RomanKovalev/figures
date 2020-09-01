@@ -26,6 +26,7 @@ SECRET_KEY = ')9zg#iv=5tcpbb0*#-ec5_h-*kwv1*8op&cu(q_q8jrd93$i$t'
 DEBUG = True
 
 ALLOWED_HOSTS = ['figures-rvk.herokuapp.com']
+# ALLOWED_HOSTS = ['figures-rvk.herokuapp.com']
 
 
 # Application definition
@@ -153,8 +154,8 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ]
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_RENDERER_CLASSES': [
+#         'rest_framework.renderers.JSONRenderer',
+#     ]
+# }
