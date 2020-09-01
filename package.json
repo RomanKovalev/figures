@@ -12,7 +12,7 @@
   "homepage": "https://figures-rvk.herokuapp.com/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm install",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "react-scripts start"
