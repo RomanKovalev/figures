@@ -1,2 +1,2 @@
-release: python bmanage.py migrate
+release: python manage.py migrate
 web: gunicorn figures_api.wsgi --log-file -
