@@ -1,2 +1,1 @@
-release: python backend/src/manage.py migrate
-web: $(cd backend/src/figures_api/; gunicorn wsgi --log-file -)
+web: python manage.py runserver 0.0.0.0:8000
