@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'figures_api12.wsgi.application'
+WSGI_APPLICATION = 'figures_api.wsgi.application'
 
 
 # Database
