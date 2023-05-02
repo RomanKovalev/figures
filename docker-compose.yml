@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  backend:
+    build: 
+      dockerfile: Dockerfile.backend
+      context: ./figures_api
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./figures_api:/app
+    ports:
+      - "8003:8000"
+
+  # frontend:
+  #   image: redis:6.2-alpine
+  #   restart: always
+  #   ports:
+  #     - "16379:6379"
+  #   command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+
+  # worker:
+  #   build: .
+  #   env_file:
+  #   - .env
+  #   restart: always
+  #   command: bash -c "celery -A bonfire_quotes worker -B -l INFO"

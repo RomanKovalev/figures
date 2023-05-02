@@ -25,8 +25,7 @@ SECRET_KEY = ')9zg#iv=5tcpbb0*#-ec5_h-*kwv1*8op&cu(q_q8jrd93$i$t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['figures-rvk.herokuapp.com']
-# ALLOWED_HOSTS = ['figures-rvk.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    'figures_api.api',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'figures_api.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
@@ -74,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'figures_api.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database
