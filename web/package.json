@@ -4,12 +4,13 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "7.0.0-beta.55",
+    "build": "^0.1.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
     "serve": "^11.3.2"
   },
-  "homepage": "https://figures-rvk.herokuapp.com/",
+  "homepage": "https://github.com/RomanKovalev/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

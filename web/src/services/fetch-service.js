@@ -1,11 +1,11 @@
 export default class FetchService {
 
-  _apiBase = 'https://figures-rvk.herokuapp.com/api/'
+  _apiBase = 'http://5.249.155.170:8003/api/'
 
   async getResource(url) {
     const res = await fetch(url)
     if (!res.ok) {
-      throw new Error(`Could not fetch ${url}` + `, received ${res.status}`)
+      throw new Error(`Could not fetch ${url}, received ${res.status}`)
     }
     return await res.json()
   };
@@ -25,7 +25,7 @@ export default class FetchService {
       body: JSON.stringify(body)
     })
     if (!res.ok) {
-      throw new Error(`Could not fetch ${url}` + `, received ${res.status}`)
+      throw new Error(`Could not fetch ${url}, received ${res.status}`)
     }
     return await res.json()
   };
