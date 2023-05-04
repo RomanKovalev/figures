@@ -30,3 +30,6 @@ yarn-error.log*
 __pycache__/
 local_settings.py
 venv/
+web/build/**
+web/node_modules/**
+web/package-lock.json

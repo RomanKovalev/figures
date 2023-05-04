@@ -11,16 +11,10 @@ services:
     ports:
       - "8003:8000"
 
-  # frontend:
-  #   image: redis:6.2-alpine
-  #   restart: always
-  #   ports:
-  #     - "16379:6379"
-  #   command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-
-  # worker:
-  #   build: .
-  #   env_file:
-  #   - .env
-  #   restart: always
-  #   command: bash -c "celery -A bonfire_quotes worker -B -l INFO"
+  web:
+    build: 
+      dockerfile: Dockerfile.frontend
+      context: ./web
+    ports:
+      - "3000:3000"
+    command: bash -c "npm run start"
