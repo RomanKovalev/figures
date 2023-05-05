@@ -55,7 +55,7 @@ export default class App extends Component {
     ev.preventDefault();
     const id = ev.dataTransfer.getData("id")
     const figure = this.state.items.filter(obj => {
-      return obj.id === id
+      return obj.id == id
     })
     if (!!figure[0]) {
       let width, height, top, left
