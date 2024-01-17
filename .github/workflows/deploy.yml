@@ -11,21 +11,40 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs:
+#   # This workflow contains a single job called "build"
+#   build:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Deploy to Staging Server
+#       uses: appleboy/ssh-action@v0.1.8
+#       with:
+#         host: ${{ secrets.SSH_HOST }}
+#         username: ${{ secrets.SSH_USER }}
+#         key: ${{ secrets.SSH_PRIVATE_KEY }}
+#         script: |
+#           cd figures
+#           git pull
+#           docker-compose down
+#           docker-compose up --build -d
+
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  Deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Deploy to Staging Server
-      uses: appleboy/ssh-action@v0.1.8
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd figures
-          git pull
-          docker-compose down
-          docker-compose up --build -d
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.SSH_HOST}}
+            USER_NAME: ${{secrets.SSH_USER}}
+      
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER}@${HOSTNAME} '
+          mkdir 1111111

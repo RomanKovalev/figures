@@ -1,6 +1,6 @@
 export default class FetchService {
 
-  _apiBase = 'http://5.249.155.170:8003/api/'
+  _apiBase = 'http://52.42.163.24:8003/api/'
 
   async getResource(url) {
     const res = await fetch(url)
