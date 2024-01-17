@@ -55,6 +55,7 @@ export default class App extends Component {
     ev.preventDefault();
     const id = ev.dataTransfer.getData("id")
     const figure = this.state.items.filter(obj => {
+      // eslint-disable-next-line
       return obj.id == id
     })
     if (!!figure[0]) {
