@@ -13,9 +13,6 @@ class UserType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-  """
-  Queries for the Restaurant model
-  """
   users = graphene.List(UserType)
 
   def resolve_users(self, info, **kwargs):

@@ -33,3 +33,6 @@ venv/
 web/build/**
 web/node_modules/**
 web/package-lock.json
+
+
+.idea/
