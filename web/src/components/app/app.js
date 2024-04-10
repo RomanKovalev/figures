@@ -1,52 +1,86 @@
-import React, {Component, useState} from 'react';
+import React, { useState } from 'react';
 import Boxitem from "../boxitem";
 
-import FetchService from "../../services/fetch-service";
 import './app.css'
-import FetchQLService from "../../services/fetch-service-graphql";  // fetchService = new FetchQLService();
-
 
 import { useEffect} from "react";
 
-const fetchService = new FetchService();
-
+const headers = { 'Accept': 'application/json', 'Content-Type': 'application/json'}
 const App = () => {
-
+  const apiBase = 'http://127.0.0.1:8003/api/';
   const [items, setItems] = useState([])
   const [resizer, setResizer] = useState(null)
 
-  useEffect(() => {
-    const figures = fetchService.getFigures().then((figures) => {
-      setItems(figures)
+  useEffect(() => { getFigures().then((figures) => {setItems(figures)}) }, []);
+
+  const getFigures = () => {
+    const url = `${apiBase}list`;
+    return fetch(url, {
+      method: 'GET',
     })
-  }, []);
+    .then((res) => {
+      return res.json()
+    })
+    .then((data) => {
+      console.log('data')
+      return data
+    })
+    .catch((error) => {
+      console.error('Error getting figures list figure:', error);
+    });
+  }
 
   const postFigure = (body) => {
-    fetchService
-      .postFigure(body)
-      .then((answer) => {
-          const figures = fetchService.getFigures().then((figures) => {
-            setItems(figures)
-         })
-      })
+    const url = `${apiBase}list`;
+    fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(body)
+    })
+    .then((res) => {
+      return res.json()
+    })
+    .then((data) => {
+      getFigures().then((figures) => {setItems(figures)})
+    })
+    .catch((error) => {
+      console.error('Error posting figure:', error);
+    });
   }
 
   const delFigures = () => {
-    fetchService.delFigures()
-    .then((answer) => {
-      const figures = fetchService.getFigures().then((figures) => {
-        setItems(figures)
-      })
+    const url = `${apiBase}list`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: headers,
     })
+    .then((res) => {
+      return res.json()
+    })
+    .then((data) => {
+      getFigures().then((figures) => {setItems(figures)})
+    })
+    .catch((error) => {
+      console.error('Error posting figure:', error);
+    });
   }
 
   const updateFigure = (body, id) => {
-    fetchService.updateFigure(body, id)
-    .then((answer) => {
-      const figures = fetchService.getFigures().then((figures) => {
-        setItems(figures)
-      })
+    const url = `${apiBase}update/${id}/`;
+    fetch(url, {
+      method: 'PATCH',
+      headers: headers,
+      body: JSON.stringify(body)
     })
+    .then((res) => {
+      return res.json()
+    })
+    .then((data) => {
+      getFigures().then((figures) => {setItems(figures)})
+    })
+    .catch((error) => {
+      console.error('Error posting figure:', error);
+    });
   }
 
   const onDrop = (ev) => {
@@ -93,7 +127,7 @@ const App = () => {
         "height": height
       }
       updateFigure(body, id)
-      const figures = fetchService.getFigures().then((figures) => {
+      getFigures().then((figures) => {
         setItems(figures)
       })
       setResizer({ 'resizer': null })
@@ -144,7 +178,7 @@ const App = () => {
       offsety: 0,
     }
     postFigure(newFigure);
-    const figures = fetchService.getFigures().then((figures) => {
+    getFigures().then((figures) => {
       setItems(figures)
     })
   };
