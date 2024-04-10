@@ -1,21 +1,19 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from django.contrib.auth import get_user_model
+from api.models import Figure
 
-User = get_user_model()
-
-
-class UserType(DjangoObjectType):
+class FigureType(DjangoObjectType):
   class Meta:
-    model = User
-    fields = ("id", "username", "email", "first_name", "last_name")
-
+    model = Figure
+    fields = '__all__'
 
 class Query(graphene.ObjectType):
-  users = graphene.List(UserType)
+  figures = graphene.List(FigureType)
 
-  def resolve_users(self, info, **kwargs):
-    return User.objects.all()
+  def resolve_figures(self, info, **kwargs):
+    return Figure.objects.all()
+  # def resolve_users(self, info, **kwargs):
+  #   return User.objects.all()
 
 schema = graphene.Schema(query=Query)
