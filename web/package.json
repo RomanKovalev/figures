@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/runtime": "7.0.0-beta.55",
+    "@babel/runtime": "^7.24.4",
     "build": "^0.1.4",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
-    "serve": "^11.3.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "serve": "^14.2.1"
   },
   "homepage": "https://github.com/RomanKovalev/",
   "scripts": {
@@ -18,8 +18,8 @@
     "eject": "react-scripts eject"
   },
   "engines": {
-    "node": "13.9.0",
-    "npm": "6.13.7"
+    "node": "20.10.0",
+    "npm": "10.2.3"
   },
   "eslintConfig": {
     "extends": "react-app"
