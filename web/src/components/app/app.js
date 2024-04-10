@@ -2,16 +2,40 @@ import React, { useState } from 'react';
 import Boxitem from "../boxitem";
 
 import './app.css'
-
 import { useEffect} from "react";
+import { useQuery } from '@apollo/client';
+import { gql } from 'graphql-tag';
+
+const GET_FIGURES = gql`
+  query GetFigures {
+    figures {
+      id
+      top
+      left
+      width
+      height
+      offsetx
+      offsety
+      draggable
+    }
+  }
+`;
 
 const headers = { 'Accept': 'application/json', 'Content-Type': 'application/json'}
 const App = () => {
   const apiBase = 'http://127.0.0.1:8003/api/';
   const [items, setItems] = useState([])
   const [resizer, setResizer] = useState(null)
+  const { loading, error, data } = useQuery(GET_FIGURES);
 
-  useEffect(() => { getFigures().then((figures) => {setItems(figures)}) }, []);
+  useEffect(() => {
+    console.log(loading, error, data)
+    if (!loading && !error && data) {
+      console.log(loading, error, data)
+      setItems(data.figures)
+    }
+  }, [loading, error, data]);
+
 
   const getFigures = () => {
     const url = `${apiBase}list`;
@@ -192,30 +216,30 @@ const App = () => {
       />
     );
     return (
-      <div>
-        <div className="container-drag">
+        <div>
+          <div className="container-drag">
 
-          <div className="wrapper"
-            onDragOver={(e) => onDragOver(e)}
-            onDrop={(e) => onDrop(e)}
-            onMouseUp={(e) => onMouseUp(e)}
-          >
-            <div className="bnt-wrapper">
-              <button
-                onClick={addFigure}
-              >
-                Add +
-              </button><br />
-              <button
-                onClick={delFigures}
-              >
-                Clear all
-              </button>
+            <div className="wrapper"
+              onDragOver={(e) => onDragOver(e)}
+              onDrop={(e) => onDrop(e)}
+              onMouseUp={(e) => onMouseUp(e)}
+            >
+              <div className="bnt-wrapper">
+                <button
+                  onClick={addFigure}
+                >
+                  Add +
+                </button><br />
+                <button
+                  onClick={delFigures}
+                >
+                  Clear all
+                </button>
+              </div>
+              {listItems}
             </div>
-            {listItems}
           </div>
         </div>
-      </div>
     );
 }
 
