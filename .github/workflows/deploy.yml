@@ -27,6 +27,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          sudo docker rmi -f $(sudo docker images -aq)
+          sudo docker system prune -a -f
           cd figures
           git pull --rebase
           sudo docker-compose down
