@@ -1,84 +1,82 @@
-import React, { Component } from 'react';
+import React, {Component, useState} from 'react';
 import Boxitem from "../boxitem";
 
 import FetchService from "../../services/fetch-service";
 import './app.css'
+import FetchQLService from "../../services/fetch-service-graphql";  // fetchService = new FetchQLService();
 
-export default class App extends Component {
 
-  constructor() {
-    super();
-    this.getFigures();
-  }
+import { useEffect} from "react";
 
-  fetchService = new FetchService();
+const fetchService = new FetchService();
 
-  state = {
-    items: [],
-    resizer: null
+const App = () => {
 
-  }
+  const [items, setItems] = useState([])
+  const [resizer, setResizer] = useState(null)
 
-  getFigures() {
-    this.fetchService
-      .getFigures()
-      .then((figures) => {
-        this.setState({ 'items': figures })
-      })
-  };
+  useEffect(() => {
+    const figures = fetchService.getFigures().then((figures) => {
+      setItems(figures)
+    })
+  }, []);
 
-  postFigure(body) {
-    this.fetchService
+  const postFigure = (body) => {
+    fetchService
       .postFigure(body)
       .then((answer) => {
-        this.getFigures()
+          const figures = fetchService.getFigures().then((figures) => {
+            setItems(figures)
+         })
       })
   }
 
-  delFigures() {
-    this.fetchService
-    .delFigures()
+  const delFigures = () => {
+    fetchService.delFigures()
     .then((answer) => {
-      this.getFigures()
+      const figures = fetchService.getFigures().then((figures) => {
+        setItems(figures)
+      })
     })
   }
 
-  updateFigure(body, id) {
-    this.fetchService
-    .updateFigure(body, id)
+  const updateFigure = (body, id) => {
+    fetchService.updateFigure(body, id)
     .then((answer) => {
-      this.getFigures()
+      const figures = fetchService.getFigures().then((figures) => {
+        setItems(figures)
+      })
     })
-  }  
-  
-  onDrop = (ev) => {
+  }
+
+  const onDrop = (ev) => {
     ev.preventDefault();
     const id = ev.dataTransfer.getData("id")
-    const figure = this.state.items.filter(obj => {
+    const figure = items.filter(obj => {
       // eslint-disable-next-line
       return obj.id == id
     })
+
     if (!!figure[0]) {
       let width, height, top, left
       width = figure[0].width
       height = figure[0].height
-      console.log(figure[0].offsetx)
-      if (this.state.resizer === 'corner left-top') {
+      if (resizer === 'corner left-top') {
         width = figure[0].width - (ev.clientX - figure[0].left)
         height = figure[0].height - (ev.clientY - figure[0].top)
         left = ev.clientX
         top = ev.clientY
-      } else if (this.state.resizer === 'corner right-top') {
+      } else if (resizer === 'corner right-top') {
         width = figure[0].width - (figure[0].offsetx - ev.clientX)
         top = ev.clientY
         height = figure[0].height - (ev.clientY - figure[0].top)
         left = figure[0].left
-      } else if (this.state.resizer === 'corner left-bottom') {
+      } else if (resizer === 'corner left-bottom') {
         width = figure[0].width - (ev.clientX - figure[0].left)
         left = ev.clientX
         height = figure[0].height - (figure[0].offsety - ev.clientY)
         top = figure[0].top
-      } else if (this.state.resizer === 'corner right-bottom') {
+      } else if (resizer === 'corner right-bottom') {
         width = figure[0].width - (figure[0].offsetx - ev.clientX)
         height = figure[0].height - (figure[0].offsety - ev.clientY)
         top = figure[0].top
@@ -94,22 +92,24 @@ export default class App extends Component {
         "width": width,
         "height": height
       }
-      this.updateFigure(body, id)
-      this.getFigures()
-      this.setState({ 'resizer': null })
+      updateFigure(body, id)
+      const figures = fetchService.getFigures().then((figures) => {
+        setItems(figures)
+      })
+      setResizer({ 'resizer': null })
       return false;
     }
   }
 
-  onDragOver = (ev) => {
+  const onDragOver = (ev) => {
     ev.preventDefault();
   }
 
-  onMouseUp = (ev) => {
+  const onMouseUp = (ev) => {
     ev.preventDefault()
   }
 
-  onDragStart = (ev, id) => {
+  const onDragStart = (ev, id) => {
     let style = window.getComputedStyle(ev.target, null);
     ev.dataTransfer.setData("text/plain",
       (parseInt(style.getPropertyValue("left"), 10) - ev.clientX) + ',' + (parseInt(style.getPropertyValue("top"), 10) - ev.clientY));
@@ -117,67 +117,63 @@ export default class App extends Component {
     ev.dataTransfer.setData('id', id)
   }
 
-  onMouseDown = (ev, id) => {
+  const onMouseDown = (ev, id) => {
     const offsetx = ev.clientX
     const offsety = ev.clientY
-    this.setState({ 'resizer': ev.target.className })
+    setResizer(ev.target.className)
     const body = {
       "offsetx": offsetx,
       "offsety": offsety,
     }
-    this.updateFigure(body, id)
+    updateFigure(body, id)
     return false;
   }
 
-  delAll = () => {
-    this.delFigures()
-  };
-
-  getRandomInt = (min, max) => {
+  const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
-  addFigure = () => {
+  const addFigure = () => {
     const newFigure = {
-      left: this.getRandomInt(10, 900),
-      top: this.getRandomInt(10, 900),
-      width: this.getRandomInt(40, 300),
-      height: this.getRandomInt(40, 300),
+      left: getRandomInt(10, 900),
+      top: getRandomInt(10, 900),
+      width: getRandomInt(40, 300),
+      height: getRandomInt(40, 300),
       draggable: true,
       offsetx: 0,
       offsety: 0,
     }
-    this.postFigure(newFigure);
-    this.getFigures();
+    postFigure(newFigure);
+    const figures = fetchService.getFigures().then((figures) => {
+      setItems(figures)
+    })
   };
 
-  render() {
-    const listItems = this.state.items.map((p) =>
-      <Boxitem
+  const listItems = items.map((p) =>
+    <Boxitem
         state={p}
         key={p.id}
-        onDragStart={this.onDragStart}
-        onMouseDown={this.onMouseDown}
+        onDragStart={onDragStart}
+        onMouseDown={onMouseDown}
       />
-
     );
     return (
       <div>
         <div className="container-drag">
 
           <div className="wrapper"
-            onDragOver={(e) => this.onDragOver(e)}
-            onDrop={(e) => this.onDrop(e)}
-            onMouseUp={(e) => this.onMouseUp(e)}
+            onDragOver={(e) => onDragOver(e)}
+            onDrop={(e) => onDrop(e)}
+            onMouseUp={(e) => onMouseUp(e)}
           >
             <div className="bnt-wrapper">
               <button
-                onClick={this.addFigure}
+                onClick={addFigure}
               >
                 Add +
               </button><br />
               <button
-                onClick={this.delAll}
+                onClick={delFigures}
               >
                 Clear all
               </button>
@@ -187,6 +183,6 @@ export default class App extends Component {
         </div>
       </div>
     );
-  };
 }
 
+export default App;
