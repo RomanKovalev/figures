@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'graphene_django',
     'rest_framework',
     'corsheaders',
 
@@ -125,7 +126,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'build/static')
-STATICFILES_STORAGE = "whitenoise.django.GzipManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.django.GzipManifestStaticFilesStorage"
 
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -158,3 +159,6 @@ CORS_ALLOW_HEADERS = [
 #         'rest_framework.renderers.JSONRenderer',
 #     ]
 # }
+GRAPHENE = {
+    'SCHEMA': 'figures_api.schema.schema'
+}
