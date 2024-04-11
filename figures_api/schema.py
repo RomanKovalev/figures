@@ -38,9 +38,38 @@ class CreateFigure(graphene.Mutation):
     figure.save()
     return CreateFigure(figure=figure)
 
+
+class UpdateFigure(graphene.Mutation):
+  figure = graphene.Field(FigureType)
+  ok = graphene.Boolean()
+  class Arguments:
+    pk = graphene.Int(required=True)
+    top = graphene.Int()
+    left = graphene.Int()
+    width = graphene.Int()
+    height = graphene.Int()
+    draggable = graphene.Boolean()
+    offsetx = graphene.Int()
+    offsety = graphene.Int()
+
+  def mutate(self, info, pk, **kwargs):
+    figure = Figure.objects.filter(pk=pk)
+    figure.update(**kwargs)
+    return UpdateFigure(ok=True, figure=figure)
+
+
+class DeleteFigures(graphene.Mutation):
+  ok = graphene.Boolean()
+
+  def mutate(self, info):
+    Figure.objects.all().delete()
+    return UpdateFigure(ok=True)
+
+
 class FigureMutation(graphene.ObjectType):
   addFigure = CreateFigure.Field()
-  # update_figure = graphene.Field(FigureType)
+  updateFigure = UpdateFigure.Field()
+  deleteFigures = DeleteFigures.Field()
 
 
 schema = graphene.Schema(query=FiguresQuery, mutation=FigureMutation)
