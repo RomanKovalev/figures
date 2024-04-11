@@ -3,107 +3,74 @@ import Boxitem from "../boxitem";
 
 import './app.css'
 import { useEffect} from "react";
-import { useQuery } from '@apollo/client';
-import { gql } from 'graphql-tag';
-
-const GET_FIGURES = gql`
-  query GetFigures {
-    figures {
-      id
-      top
-      left
-      width
-      height
-      offsetx
-      offsety
-      draggable
-    }
-  }
-`;
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_FIGURES, ADD_FIGURE, UPDATE_FIGURE, DELETE_ALL_FIGURES } from '../../queries'
 
 const headers = { 'Accept': 'application/json', 'Content-Type': 'application/json'}
 const App = () => {
   const apiBase = 'http://127.0.0.1:8003/api/';
   const [items, setItems] = useState([])
   const [resizer, setResizer] = useState(null)
-  const { loading, error, data } = useQuery(GET_FIGURES);
+  const { loading, error, data, refetch } = useQuery(GET_FIGURES);
+  const [addFigureQL] = useMutation(ADD_FIGURE);
+  const [updateFigureQL] = useMutation(UPDATE_FIGURE);
+  const [delFiguresQL] = useMutation(DELETE_ALL_FIGURES);
 
   useEffect(() => {
-    console.log(loading, error, data)
     if (!loading && !error && data) {
-      console.log(loading, error, data)
       setItems(data.figures)
     }
   }, [loading, error, data]);
 
-
-  const getFigures = () => {
-    const url = `${apiBase}list`;
-    return fetch(url, {
-      method: 'GET',
+  const postFigure = (newFigure) => {
+    addFigureQL({
+      variables: newFigure
     })
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      console.log('data')
-      return data
-    })
-    .catch((error) => {
-      console.error('Error getting figures list figure:', error);
-    });
-  }
-
-  const postFigure = (body) => {
-    const url = `${apiBase}list`;
-    fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(body)
-    })
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      getFigures().then((figures) => {setItems(figures)})
-    })
-    .catch((error) => {
-      console.error('Error posting figure:', error);
-    });
+      .then(({ data }) => {
+        refetch()
+          .then((result) => {
+            setItems(result.data.figures);
+          })
+          .catch((error) => {
+            console.error('Error refetching data:', error);
+        });
+      })
+      .catch((error) => {
+        console.error('Error while adding new figure:', error);
+      });
   }
 
   const delFigures = () => {
-    const url = `${apiBase}list`;
-    fetch(url, {
-      method: 'DELETE',
-      headers: headers,
-    })
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      getFigures().then((figures) => {setItems(figures)})
-    })
-    .catch((error) => {
-      console.error('Error posting figure:', error);
+    delFiguresQL().then(
+       ({ data }) => {
+        refetch()
+          .then((result) => {
+            setItems(result.data.figures);
+          })
+          .catch((error) => {
+            console.error('Error refetching data:', error);
+        });
+      })
+      .catch((error) => {
+        console.error('Error while adding new figure:', error);
     });
   }
 
-  const updateFigure = (body, id) => {
-    const url = `${apiBase}update/${id}/`;
-    fetch(url, {
-      method: 'PATCH',
-      headers: headers,
-      body: JSON.stringify(body)
+  const updateFigure = (newFigure, pk) => {
+    updateFigureQL({
+      variables: { ...newFigure, pk: +pk}
     })
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      getFigures().then((figures) => {setItems(figures)})
+    .then(({ data }) => {
+      refetch()
+        .then((result) => {
+          setItems(result.data.figures);
+        })
+        .catch((error) => {
+          console.error('Error refetching data:', error);
+      });
     })
     .catch((error) => {
-      console.error('Error posting figure:', error);
+      console.error('Error while editing existing figure:', error);
     });
   }
 
@@ -151,9 +118,13 @@ const App = () => {
         "height": height
       }
       updateFigure(body, id)
-      getFigures().then((figures) => {
-        setItems(figures)
+      refetch()
+      .then((result) => {
+        setItems(result.data.figures);
       })
+      .catch((error) => {
+        console.error('Error refetching data:', error);
+      });
       setResizer({ 'resizer': null })
       return false;
     }
@@ -202,9 +173,13 @@ const App = () => {
       offsety: 0,
     }
     postFigure(newFigure);
-    getFigures().then((figures) => {
-      setItems(figures)
+    refetch()
+    .then((result) => {
+      setItems(result.data.figures);
     })
+    .catch((error) => {
+      console.error('Error refetching data:', error);
+    });
   };
 
   const listItems = items.map((p) =>
