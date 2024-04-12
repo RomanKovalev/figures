@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -162,3 +163,5 @@ CORS_ALLOW_HEADERS = [
 GRAPHENE = {
     'SCHEMA': 'figures_api.schema.schema'
 }
+
+ASGI_APPLICATION = "figures_api.asgi.application"
