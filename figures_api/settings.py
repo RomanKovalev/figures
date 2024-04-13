@@ -161,7 +161,17 @@ CORS_ALLOW_HEADERS = [
 #     ]
 # }
 GRAPHENE = {
-    'SCHEMA': 'figures_api.schema.schema'
+    'SCHEMA': 'figures_api.schema.schema',
+    'SUBSCRIPTION_PATH': '/ws/graphql'  # The path you configured in `routing.py`, including a leading slash.
 }
 
 ASGI_APPLICATION = "figures_api.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
