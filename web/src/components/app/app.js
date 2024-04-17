@@ -22,7 +22,7 @@ const App = () => {
 
   const postFigure = (newFigure) => {
     addFigureQL({
-      variables: { ...newFigure, "chatroom": "figures" }
+      variables: { ...newFigure, "wsid": "figures" }
     })
       .then(({ data }) => {
         refetch()
@@ -56,7 +56,7 @@ const App = () => {
 
   const updateFigure = (newFigure, pk) => {
     updateFigureQL({
-      variables: { ...newFigure, pk: +pk, "chatroom": "figures" }
+      variables: { ...newFigure, pk: +pk, "wsid": "figures" }
     })
     .then(({ data }) => {
       refetch()

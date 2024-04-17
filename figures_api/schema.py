@@ -3,7 +3,7 @@ from graphene_django import DjangoObjectType
 import channels_graphql_ws
 from api.models import Figure
 
-CHATROOM = "figures"
+WSID = "figures"
 
 class FigureType(DjangoObjectType):
   class Meta:
@@ -26,9 +26,9 @@ class CreateFigure(graphene.Mutation):
     draggable = graphene.Boolean(required=True)
     offsetx = graphene.Int(required=True)
     offsety = graphene.Int(required=True)
-    chatroom = graphene.String(required=True)
+    wsid = graphene.String(required=True)
   @staticmethod
-  def mutate(self, info, top, left, width, height, draggable, offsetx, offsety, chatroom):
+  def mutate(self, info, top, left, width, height, draggable, offsetx, offsety, wsid):
     figure = Figure(
       left=left,
       top=top,
@@ -39,7 +39,7 @@ class CreateFigure(graphene.Mutation):
       offsety = offsety
     )
     figure.save()
-    OnNewChatMessage.new_chat_message(OnNewChatMessage, figure=figure)
+    OnNewFigure.new_chat_message(OnNewFigure, figure=figure)
     return CreateFigure(figure=figure)
 
 
@@ -70,23 +70,23 @@ class DeleteFigures(graphene.Mutation):
     return UpdateFigure(ok=True)
 
 
-class OnNewChatMessage(channels_graphql_ws.Subscription):
-  chatroom = graphene.String()
+class OnNewFigure(channels_graphql_ws.Subscription):
+  wsid = graphene.String()
   figure = graphene.Field(FigureType)
 
-  def subscribe(self, info, chatroom=CHATROOM):
+  def subscribe(self, info, wsid=WSID):
     del info
-    return [chatroom] if chatroom is not None else None
+    return [wsid] if wsid is not None else None
 
   def publish(self, info):
     new_figure = self["figure"]
-    return OnNewChatMessage(figure=new_figure, chatroom=CHATROOM)
-
+    return OnNewFigure(figure=new_figure, wsid=WSID)
+ 
   def new_chat_message(cls, figure):
-    cls.broadcast(group=CHATROOM, payload={"figure": figure})
+    cls.broadcast(group=WSID, payload={"figure": figure})
 
 class Subscription(graphene.ObjectType):
-  on_new_chat_message = OnNewChatMessage.Field()
+  on_new_chat_message = OnNewFigure.Field()
 
 class FigureMutation(graphene.ObjectType):
   addFigure = CreateFigure.Field()
@@ -99,3 +99,7 @@ schema = graphene.Schema(query=FiguresQuery, mutation=FigureMutation, subscripti
 
 class MyGraphqlWsConsumer(channels_graphql_ws.GraphqlWsConsumer):
   schema = schema
+
+  async def on_connect(self, error):
+    pass
+
