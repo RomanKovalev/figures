@@ -23,7 +23,8 @@ export const ADD_FIGURE = gql`
     $height: Int!,
     $offsetx: Int!,
     $offsety: Int!,
-    $draggable: Boolean!
+    $draggable: Boolean!,
+    $chatroom: String!
   ) {
     addFigure(
       top: $top,
@@ -32,7 +33,8 @@ export const ADD_FIGURE = gql`
       height: $height,
       offsetx: $offsetx,
       offsety: $offsety,
-      draggable: $draggable
+      draggable: $draggable,
+      chatroom: $chatroom
     ) {
       figure {
         top
