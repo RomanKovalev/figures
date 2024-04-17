@@ -83,7 +83,8 @@ mutation {
 
 export const  FIGURES_SUBSCRIPTION = gql`
 subscription {
-  newFigureCreate{
+  newFigureNotification{
+    action
     figure{
       id
       left

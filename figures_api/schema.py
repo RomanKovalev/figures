@@ -39,7 +39,7 @@ class CreateFigure(graphene.Mutation):
       offsety = offsety
     )
     figure.save()
-    OnNewFigure.new_figure_create(OnNewFigure, figure=figure)
+    OnNewFigure.new_figure_notification(OnNewFigure, action="add", figure=figure)
     return CreateFigure(figure=figure)
 
 
@@ -59,6 +59,7 @@ class UpdateFigure(graphene.Mutation):
   def mutate(self, info, pk, **kwargs):
     figure = Figure.objects.filter(pk=pk)
     figure.update(**kwargs)
+    OnNewFigure.new_figure_notification(OnNewFigure, action="update", figure=figure[0])
     return UpdateFigure(ok=True, figure=figure)
 
 
@@ -67,11 +68,13 @@ class DeleteFigures(graphene.Mutation):
 
   def mutate(self, info):
     Figure.objects.all().delete()
+    OnNewFigure.new_figure_notification(OnNewFigure, action="delete", figure=None)
     return UpdateFigure(ok=True)
 
 
 class OnNewFigure(channels_graphql_ws.Subscription):
   wsid = graphene.String()
+  action = graphene.String()
   figure = graphene.Field(FigureType)
 
   def subscribe(self, info, wsid=WSID):
@@ -80,13 +83,13 @@ class OnNewFigure(channels_graphql_ws.Subscription):
 
   def publish(self, info):
     new_figure = self["figure"]
-    return OnNewFigure(figure=new_figure, wsid=WSID)
+    return OnNewFigure(action=self["action"], figure=new_figure, wsid=WSID)
  
-  def new_figure_create(cls, figure):
-    cls.broadcast(group=WSID, payload={"figure": figure})
+  def new_figure_notification(cls, action, figure=None):
+    cls.broadcast(group=WSID, payload={"action": action, "figure": figure})
 
 class Subscription(graphene.ObjectType):
-  new_figure_create = OnNewFigure.Field()
+  new_figure_notification = OnNewFigure.Field()
 
 class FigureMutation(graphene.ObjectType):
   addFigure = CreateFigure.Field()

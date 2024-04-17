@@ -17,9 +17,34 @@ const App = () => {
     onError: (data) => {
       console.log("onError: ", data)
     },
-    onSubscriptionData: (response) => {
-      const new_items = [...items, response.subscriptionData.data.newFigureCreate.figure]
-      setItems(new_items)
+    onSubscriptionData: (data) => {
+      const action = data.subscriptionData.data.newFigureNotification.action
+      let new_items = []
+      switch (action) {
+        case 'add':
+          new_items = [...items, data.subscriptionData.data.newFigureNotification.figure]
+          setItems(new_items)
+          break
+        case 'delete':
+          setItems([])
+          break
+        case 'update':
+          const figure = data.subscriptionData.data.newFigureNotification.figure
+          new_items = items.map(item => {
+                if (item.id === figure.id) {
+                    return { ...item, ...figure };
+                } else {
+                    return item;
+                }
+            });
+          console.log("items", items)
+          console.log("new_items", new_items)
+          setItems(new_items)
+          break
+        default:
+          console.log(`Sorry, we are out of items array.`);
+          break
+      }
     },
   });
 
