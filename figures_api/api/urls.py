@@ -7,7 +7,5 @@ from figures_api import schema
 from .views import FigureListAPIView, UpdateFigureAPIView
 
 urlpatterns = [
-    path('list', FigureListAPIView.as_view()),
-    path('update/<int:id>/', UpdateFigureAPIView.as_view()),
     path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]

@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'graphene_django',
-    'rest_framework',
     'corsheaders',
 
     'api',
@@ -157,11 +156,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_RENDERER_CLASSES': [
-#         'rest_framework.renderers.JSONRenderer',
-#     ]
-# }
+
 GRAPHENE = {
     'SCHEMA': 'figures_api.schema.schema',
     'SUBSCRIPTION_PATH': '/api/graphql'  # The path you configured in `routing.py`, including a leading slash.
