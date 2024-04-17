@@ -37,8 +37,6 @@ const App = () => {
                     return item;
                 }
             });
-          console.log("items", items)
-          console.log("new_items", new_items)
           setItems(new_items)
           break
         default:
@@ -73,6 +71,8 @@ const App = () => {
   }
 
   const delFigures = () => {
+    const oldItems = items
+    setItems([])
     delFiguresQL().then(
        ({ data }) => {
         refetch()
@@ -84,11 +84,21 @@ const App = () => {
         });
       })
       .catch((error) => {
+        setItems(oldItems)
         console.error('Error while adding new figure:', error);
     });
   }
 
   const updateFigure = (newFigure, pk) => {
+    const oldItems = items
+    console.log(newFigure, pk)
+    let newArray = items.filter(item => item.id != pk);
+    let maxIdObj = items.reduce((maxObj, currentObj) => {
+      return currentObj.id > maxObj.id ? currentObj : maxObj;
+    }, items[0]);
+    newFigure.id = maxIdObj===undefined? 0 : maxIdObj.id+1
+    setItems([...items, {...newFigure} ])
+    console.log(newArray); // [1, 2, 4, 5]
     updateFigureQL({
       variables: { ...newFigure, pk: +pk, "wsid": "figures" }
     })
@@ -98,10 +108,12 @@ const App = () => {
           setItems(result.data.figures);
         })
         .catch((error) => {
+          setItems(oldItems)
           console.error('Error refetching data:', error);
       });
     })
     .catch((error) => {
+      setItems(oldItems)
       console.error('Error while editing existing figure:', error);
     });
   }
@@ -204,6 +216,12 @@ const App = () => {
       offsetx: 0,
       offsety: 0,
     }
+    const oldItems = items
+    let maxIdObj = items.reduce((maxObj, currentObj) => {
+      return currentObj.id > maxObj.id ? currentObj : maxObj;
+    }, items[0]);
+    newFigure.id = maxIdObj===undefined? 0 : maxIdObj.id+1
+    setItems([...items, {...newFigure} ])
     postFigure(newFigure);
     refetch()
     .then((result) => {
@@ -211,6 +229,7 @@ const App = () => {
     })
     .catch((error) => {
       console.error('Error refetching data:', error);
+      setItems(oldItems)
     });
   };
 
