@@ -6,9 +6,7 @@ import { useEffect} from "react";
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_FIGURES, ADD_FIGURE, UPDATE_FIGURE, DELETE_ALL_FIGURES } from '../../queries'
 
-const headers = { 'Accept': 'application/json', 'Content-Type': 'application/json'}
 const App = () => {
-  const apiBase = 'http://127.0.0.1:8003/api/';
   const [items, setItems] = useState([])
   const [resizer, setResizer] = useState(null)
   const { loading, error, data, refetch } = useQuery(GET_FIGURES);
