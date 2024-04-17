@@ -39,7 +39,7 @@ class CreateFigure(graphene.Mutation):
       offsety = offsety
     )
     figure.save()
-    OnNewFigure.new_chat_message(OnNewFigure, figure=figure)
+    OnNewFigure.new_figure_create(OnNewFigure, figure=figure)
     return CreateFigure(figure=figure)
 
 
@@ -82,11 +82,11 @@ class OnNewFigure(channels_graphql_ws.Subscription):
     new_figure = self["figure"]
     return OnNewFigure(figure=new_figure, wsid=WSID)
  
-  def new_chat_message(cls, figure):
+  def new_figure_create(cls, figure):
     cls.broadcast(group=WSID, payload={"figure": figure})
 
 class Subscription(graphene.ObjectType):
-  on_new_chat_message = OnNewFigure.Field()
+  new_figure_create = OnNewFigure.Field()
 
 class FigureMutation(graphene.ObjectType):
   addFigure = CreateFigure.Field()

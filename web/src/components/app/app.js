@@ -3,8 +3,8 @@ import Boxitem from "../boxitem";
 
 import './app.css'
 import { useEffect} from "react";
-import { useQuery, useMutation } from '@apollo/client';
-import { GET_FIGURES, ADD_FIGURE, UPDATE_FIGURE, DELETE_ALL_FIGURES } from '../../queries'
+import { useQuery, useMutation, useSubscription } from '@apollo/client';
+import { GET_FIGURES, ADD_FIGURE, UPDATE_FIGURE, DELETE_ALL_FIGURES, FIGURES_SUBSCRIPTION } from '../../queries'
 
 const App = () => {
   const [items, setItems] = useState([])
@@ -13,6 +13,15 @@ const App = () => {
   const [addFigureQL] = useMutation(ADD_FIGURE);
   const [updateFigureQL] = useMutation(UPDATE_FIGURE);
   const [delFiguresQL] = useMutation(DELETE_ALL_FIGURES);
+  const { dataWs, loadingWs } = useSubscription(FIGURES_SUBSCRIPTION, {
+    onError: (data) => {
+      console.log("onError: ", data)
+    },
+    onSubscriptionData: (response) => {
+      const new_items = [...items, response.subscriptionData.data.newFigureCreate.figure]
+      setItems(new_items)
+    },
+  });
 
   useEffect(() => {
     if (!loading && !error && data) {

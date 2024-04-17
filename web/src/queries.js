@@ -80,3 +80,20 @@ mutation {
       ok
     }
 }`;
+
+export const  FIGURES_SUBSCRIPTION = gql`
+subscription {
+  newFigureCreate{
+    figure{
+      id
+      left
+      top
+      height
+      width
+      draggable
+      offsetx
+      offsety
+    }
+  }
+}
+`;

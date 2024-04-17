@@ -12,9 +12,11 @@ from .routing import websocket_urlpatterns
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 application = channels.routing.ProtocolTypeRouter({
-    "websocket": channels.routing.URLRouter([
-        django.urls.path("api/graphql", MyGraphqlWsConsumer.as_asgi()),
-    ])
+    "websocket": AllowedHostsOriginValidator(
+         AuthMiddlewareStack(channels.routing.URLRouter([
+            django.urls.path("api/graphql", MyGraphqlWsConsumer.as_asgi()),
+        ])
+     ))
 })
 
 # application = ProtocolTypeRouter(
