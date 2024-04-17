@@ -8,6 +8,7 @@ import { GET_FIGURES, ADD_FIGURE, UPDATE_FIGURE, DELETE_ALL_FIGURES, FIGURES_SUB
 
 const App = () => {
   const [items, setItems] = useState([])
+  const [errors, setErrors] = useState("")
   const [resizer, setResizer] = useState(null)
   const { loading, error, data, refetch } = useQuery(GET_FIGURES);
   const [addFigureQL] = useMutation(ADD_FIGURE);
@@ -49,6 +50,7 @@ const App = () => {
   useEffect(() => {
     if (!loading && !error && data) {
       setItems(data.figures)
+      setErrors("")
     }
   }, [loading, error, data]);
 
@@ -59,6 +61,7 @@ const App = () => {
       .then(({ data }) => {
         refetch()
           .then((result) => {
+            setErrors("")
             setItems(result.data.figures);
           })
           .catch((error) => {
@@ -77,6 +80,7 @@ const App = () => {
        ({ data }) => {
         refetch()
           .then((result) => {
+            setErrors("")
             setItems(result.data.figures);
           })
           .catch((error) => {
@@ -85,6 +89,7 @@ const App = () => {
       })
       .catch((error) => {
         setItems(oldItems)
+        setErrors("Network problem...")
         console.error('Error while adding new figure:', error);
     });
   }
@@ -97,7 +102,7 @@ const App = () => {
       return currentObj.id > maxObj.id ? currentObj : maxObj;
     }, items[0]);
     newFigure.id = maxIdObj===undefined? 0 : maxIdObj.id+1
-    setItems([...items, {...newFigure} ])
+    setItems([...newArray, {...newFigure} ])
     console.log(newArray); // [1, 2, 4, 5]
     updateFigureQL({
       variables: { ...newFigure, pk: +pk, "wsid": "figures" }
@@ -114,6 +119,7 @@ const App = () => {
     })
     .catch((error) => {
       setItems(oldItems)
+      setErrors("Network problem...")
       console.error('Error while editing existing figure:', error);
     });
   }
@@ -229,6 +235,7 @@ const App = () => {
     })
     .catch((error) => {
       console.error('Error refetching data:', error);
+      setErrors("Network problem...")
       setItems(oldItems)
     });
   };
@@ -261,6 +268,7 @@ const App = () => {
                 >
                   Clear all
                 </button>
+                <di>{errors}</di>
               </div>
               {listItems}
             </div>
