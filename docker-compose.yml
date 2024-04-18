@@ -3,13 +3,14 @@ version: "3"
 services:
   backend:
     build: 
-      dockerfile: Dockerfile.backend
-      context: ./figures_api
+      dockerfile: figures_api/Dockerfile.dev
+      context: .
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./figures_api:/app
+      - ./:/app
     ports:
       - "8003:8000"
+      - "8004:8001"
     links:
       - redis
 

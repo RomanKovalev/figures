@@ -2,14 +2,16 @@ import os
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+
+django_asgi_app = get_asgi_application()
+
 from channels.security.websocket import AllowedHostsOriginValidator
 from channels.auth import AuthMiddlewareStack
 import channels
 import django
 from .schema import MyGraphqlWsConsumer
-from .routing import websocket_urlpatterns
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 application = channels.routing.ProtocolTypeRouter({
     "websocket": AllowedHostsOriginValidator(

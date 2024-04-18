@@ -268,7 +268,7 @@ const App = () => {
                 >
                   Clear all
                 </button>
-                <di>{errors}</di>
+                <div>{errors}</div>
               </div>
               {listItems}
             </div>

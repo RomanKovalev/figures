@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from pathlib import Path
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -27,8 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
+WSGI_APPLICATION = 'wsgi.application'
+ASGI_APPLICATION = "api.asgi.application"
 
 INSTALLED_APPS = [
     'daphne',
@@ -40,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'graphene_django',
     'corsheaders',
 
@@ -75,9 +76,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -158,11 +156,10 @@ CORS_ALLOW_HEADERS = [
 
 
 GRAPHENE = {
-    'SCHEMA': 'figures_api.schema.schema',
+    'SCHEMA': 'api.schema.schema',
     'SUBSCRIPTION_PATH': '/api/graphql'  # The path you configured in `routing.py`, including a leading slash.
 }
 
-ASGI_APPLICATION = "figures_api.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
