@@ -5,12 +5,14 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 
+const API_URL = process.env.REACT_APP_API_URL
+
 const httpLink = new HttpLink({
-  uri: 'http://localhost:8003/api/graphql'
+  uri: `http://${API_URL}`
 });
 
 const wsLink = new WebSocketLink(
-  new SubscriptionClient("ws://127.0.0.1:8003/api/graphql", {
+  new SubscriptionClient(`ws://${API_URL}`, {
     connectionParams: {
     }
   })
