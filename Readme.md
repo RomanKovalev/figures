@@ -6,3 +6,7 @@ User can add another figure, which will save to database too. Also user can drag
 
 If a user re-open browser he will see the figures which were before window closed.
 
+Based on: 
+React, Apollo
+Django channels, GraphQl
+AWS Route53, EC2, Github Actions, Docker containers
