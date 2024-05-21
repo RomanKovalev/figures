@@ -49,7 +49,7 @@ python-dotenv==1.0.1
 pytz==2024.1
 PyYAML==6.0.1
 redis==5.0.3
-requests==2.31.0
+requests==2.32.0
 requests-oauthlib==2.0.0
 Rx==1.6.3
 service-identity==24.1.0
