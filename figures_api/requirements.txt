@@ -62,7 +62,7 @@ Twisted==24.3.0
 txaio==23.1.1
 typing_extensions==4.11.0
 unicorn==2.0.1.post1
-urllib3==2.2.1
+urllib3==2.2.2
 uvicorn==0.29.0
 uvloop==0.19.0
 watchfiles==0.21.0
